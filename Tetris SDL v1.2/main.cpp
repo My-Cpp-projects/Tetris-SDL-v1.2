@@ -79,6 +79,7 @@ Piece sPiece; // the 's' prefixes indicate this is a 'structure'
 
 //-----------------------------------------------------------------------------
 double start_time;  // used in timing
+double press_time; // used to regulate the speed when a key is pressed
 bool GAMESTARTED = false; // used by NewBlock()
 
 //-----------------------------------------------------------------------------
@@ -89,6 +90,12 @@ bool GAMERUNNING = true;
 //=============================================================================
 void OnEvent()
 {
+	// used to regulate direction.
+	// static because the function is called everytime and we dont need to loose previous values
+	static int moveDirectionY = 0;
+	static int moveDirectionX = 0;
+	static bool rotate = false;
+
 	// SDL_Event --- A union that contains structures for the different event types.
 	SDL_Event Event;
 
@@ -106,6 +113,8 @@ void OnEvent()
 				GAMERUNNING = false;
 			} break;
 
+			// !!! In SDL 1.2 (may not apply to new versions) Keyboard events only take place when a keys state changes from being unpressed to pressed, and vice versa. !!!
+			// More info here: ( https://www.libsdl.org/release/SDL-1.2.15/docs/html/guideinputkeyboard.html )
 			case SDL_KEYDOWN:	// A key has been pressed
 			{
 				// key --- A structure that contains keyboard button event information. The information on what key was pressed or released is in the keysym member.
@@ -122,26 +131,82 @@ void OnEvent()
 
 					case SDLK_DOWN:
 					{
-						Move(0, 1);
+						moveDirectionY = 1;
+
 					} break;
 
 					case SDLK_UP:
 					{
-						RotateBlock();
+						rotate = true;
 					} break;
 
 					case SDLK_LEFT:
 					{
-						Move(-1, 0);
+						moveDirectionX = -1;
 					} break;
 
 					case SDLK_RIGHT:
 					{
-						Move(1, 0);
+						moveDirectionX = 1;
+					} break;
+				}
+			} break;
+
+			// when the pressed key is released we need to stop moving at that direction
+			case SDL_KEYUP:	// A key has been released
+			{
+				int Sym = Event.key.keysym.sym;
+
+				switch (Sym)
+				{
+					case SDLK_DOWN:
+					{
+						if (moveDirectionY > 0)
+						{
+							moveDirectionY = 0;
+						}
+					} break;
+
+					case SDLK_UP:
+					{
+						if (rotate)
+						{
+							rotate = false;
+						}
+					} break;
+
+					case SDLK_LEFT:
+					{
+						if (moveDirectionX < 0)
+						{
+							moveDirectionX = 0;
+						}
+					} break;
+
+					case SDLK_RIGHT:
+					{
+						if (moveDirectionX > 0)
+						{
+							moveDirectionX = 0;
+						}
 					} break;
 				}
 			} break;
 		}
+	}
+
+	// regulate the speed
+	if ((SDL_GetTicks() - press_time) > 50)
+	{
+		Move(moveDirectionX, 0);
+		Move(0, moveDirectionY);
+
+		if (rotate)
+		{
+			RotateBlock();
+		}
+
+		press_time = SDL_GetTicks();
 	}
 }
 
@@ -720,7 +785,6 @@ void RemoveRow(int row)
 			Map[x][y] = Map[x][y - 1];
 		}
 	}
-
 }
 
 //-----------------------------------------------------------------------------
