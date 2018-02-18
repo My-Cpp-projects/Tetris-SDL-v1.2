@@ -1,5 +1,6 @@
 
 
+
 //=============================================================================
 // FALLING BLOCK GAME!
 // main.cpp
@@ -9,10 +10,6 @@
 #include <stdlib.h>
 // Used for Error checking
 #include <iostream>
-
-//=============================================================================
-// To gain access to STL
-using namespace std;
 
 //=============================================================================
 #define WWIDTH		160									// Width of Window
@@ -56,11 +53,14 @@ int CollisionTest(int nx, int ny); // test collision of blocks
 void RemoveRow(int row); // remove a row.. that would be the 'x'.
 void NewGame(); // make a new game!
 
+// Blitting --- Basically it means copying the image from one surface to another
 // Makes it easier to Blit a Surface to another Surface
 void Blit(SDL_Surface* Dest, int DestX, int DestY, SDL_Surface* Src);
 void Blit(SDL_Surface* Dest, int DestX, int DestY, SDL_Surface* Src, int SrcX, int SrcY, int SrcW, int SrcH);
 
 //-----------------------------------------------------------------------------
+// SDL_Surface --- A structure that contains a collection of pixels used in software blitting.
+//				   SDL_Surface's represent areas of "graphical" memory, memory that can be drawn to.
 SDL_Surface* Display;	// Our main display surface
 
 //-----------------------------------------------------------------------------
@@ -89,8 +89,12 @@ bool GAMERUNNING = true;
 //=============================================================================
 void OnEvent()
 {
+	// SDL_Event --- A union that contains structures for the different event types.
 	SDL_Event Event;
 
+	// int SDL_PollEvent(SDL_Event* event) --- Use this function to poll for currently pending events.
+	//										   Returns 1 if there is a pending event or 0 if there are none available.
+	//
 	//===  Event loop ===//
 	// Grab any events in the queue
 	while (SDL_PollEvent(&Event))
@@ -98,30 +102,45 @@ void OnEvent()
 		switch (Event.type)
 		{
 			case SDL_QUIT:		// Found a quit event
+			{
 				GAMERUNNING = false;
-				break;
+			} break;
 
 			case SDL_KEYDOWN:	// A key has been pressed
+			{
+				// key --- A structure that contains keyboard button event information. The information on what key was pressed or released is in the keysym member.
+				// keysym --- A structure that contains key information used in key events.
+				// sym --- The SDL virtual key representation.
 				int Sym = Event.key.keysym.sym;
+
 				switch (Sym)
 				{
 					case SDLK_ESCAPE:
+					{
 						GAMERUNNING = false;
-						break;
+					} break;
+
 					case SDLK_DOWN:
+					{
 						Move(0, 1);
-						break;
+					} break;
+
 					case SDLK_UP:
+					{
 						RotateBlock();
-						break;
+					} break;
+
 					case SDLK_LEFT:
+					{
 						Move(-1, 0);
-						break;
+					} break;
+
 					case SDLK_RIGHT:
+					{
 						Move(1, 0);
-						break;
+					} break;
 				}
-				break;
+			} break;
 		}
 	}
 }
@@ -129,35 +148,50 @@ void OnEvent()
 //-----------------------------------------------------------------------------
 int main(int argc, char* argv[])
 {
-
+	// if function name is not followed with () like here, then the name of function evaluates as its adress
+	//
+	// int atexit (void (*func)(void)) noexcept;
+	// The function pointed by func is automatically called without arguments when the program terminates normally.
+	//
 	// Make sure when we are done we clean up
 	atexit(GameDone);
 
 	//===  Start SDL Routines  ===//
+	//
+	// SDL_Init(Uint32 flags) --- Use this function to initialize the SDL library. This must be called before using most other SDL functions.
+	// SDL_INIT_VIDEO --- Video subsystem; automatically initializes the events subsystem
+	//
 	// Start up just the Video
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
-		cout << "OnInit > Cannot Initialize SDL Systems: " << SDL_GetError() << endl;
+		std::cout << "OnInit > Cannot Initialize SDL Systems: " << SDL_GetError() << std::endl;
 		return 0;
 	}
 
 	//===  Create a video surface  ===//
+	//
+	// SDL_SetVideoMode(int width, int height, int bpp, Uint32 flags) --- Set up a video mode with the specified width, height and bits-per-pixel.
+	//
 	// Create the Window
 	Display = SDL_SetVideoMode(WWIDTH, WHEIGHT, WBIT, WFLAGS);
+
 	if (!Display)
 	{
-		cout << "OnInit > Cannot set Video Mode:" << SDL_GetError() << endl;
+		std::cout << "OnInit > Cannot set Video Mode:" << SDL_GetError() << std::endl;
 		return 0;
 	}
 
 	//===  Window Stuff  ===//
+	//
+	// SDL_WM_SetCaption --- Sets the window tile and icon name.
+	//
 	// Set the Window Caption
 	SDL_WM_SetCaption(WINDOWTITLE, WINDOWTITLE);
 
 	// if program initialization failed, then return with 0
 	if (!GameInit())
 	{
-		cout << "OnInit > Game Init failed!" << endl;
+		std::cout << "OnInit > Game Init failed!" << std::endl;
 		return 0;
 	}
 
@@ -180,7 +214,7 @@ bool GameInit()
 
 	if (!surfBlocks)
 	{
-		cout << "GameInit > File not Found: blocks.bmp" << endl;
+		std::cout << "GameInit > File not Found: blocks.bmp" << std::endl;
 		return false;
 	}
 
@@ -203,6 +237,7 @@ void GameDone()
 //-----------------------------------------------------------------------------
 void GameLoop()
 {
+	// Uint32 SDL_GetTicks(void) --- Use this function to get the number of milliseconds since the SDL library initialization.
 	if ((SDL_GetTicks() - start_time) > 1000)
 	{
 		Move(0, 1);
@@ -216,14 +251,18 @@ void NewGame()
 	GAMESTARTED = false;
 
 	// start out the map
-	for (int x = 0; x < MAPWIDTH; x++)
+	for (int x = 0; x < MAPWIDTH; ++x)
 	{
-		for (int y = 0; y < MAPHEIGHT + 1; y++)
+		for (int y = 0; y < MAPHEIGHT + 1; ++y)
 		{
 			if (y == MAPHEIGHT) // makes Y-collision easier.
+			{
 				Map[x][y] = TILEGREY;
+			}
 			else
+			{
 				Map[x][y] = TILEBLACK;
+			}
 		}
 	}
 
@@ -235,37 +274,57 @@ void NewGame()
 void DrawTile(int x, int y, int tile)
 {
 	// Draw the Tile
-	Blit(Display, x*TILESIZE, y*TILESIZE, surfBlocks, tile*TILESIZE, 0, TILESIZE, TILESIZE);
+	Blit(Display, x * TILESIZE, y * TILESIZE, surfBlocks, tile * TILESIZE, 0, TILESIZE, TILESIZE);
 }
 
 //-----------------------------------------------------------------------------
 void DrawMap()
 {
-	int xmy, ymx;
+	int xmy;
+	int ymx;
 
 	// place the toolbar
-	for (xmy = MAPWIDTH; xmy < MAPWIDTH + GREY; xmy++)
-		for (ymx = 0; ymx < MAPHEIGHT; ymx++)
+	for (xmy = MAPWIDTH; xmy < MAPWIDTH + GREY; ++xmy)
+	{
+		for (ymx = 0; ymx < MAPHEIGHT; ++ymx)
+		{
 			DrawTile(xmy, ymx, TILEGREY);
+		}
+	}
 
 	// draw preview block
-	for (xmy = 0; xmy < 4; xmy++)
-		for (ymx = 0; ymx < 4; ymx++)
+	for (xmy = 0; xmy < 4; ++xmy)
+	{
+		for (ymx = 0; ymx < 4; ++ymx)
+		{
 			if (sPrePiece.size[xmy][ymx] != TILENODRAW)
+			{
 				DrawTile(sPrePiece.x + xmy, sPrePiece.y + ymx, sPrePiece.size[xmy][ymx]);
+			}
+		}
+	}
 
 	// draw the map
 	// loop through the positions
-	for (xmy = 0; xmy < MAPWIDTH; xmy++)
-		for (ymx = 0; ymx < MAPHEIGHT; ymx++)
+	for (xmy = 0; xmy < MAPWIDTH; ++xmy)
+	{
+		for (ymx = 0; ymx < MAPHEIGHT; ++ymx)
+		{
 			DrawTile(xmy, ymx, Map[xmy][ymx]);
+		}
+	}
 
 	// draw moving block
-	for (xmy = 0; xmy < 4; xmy++)
-		for (ymx = 0; ymx < 4; ymx++)
+	for (xmy = 0; xmy < 4; ++xmy)
+	{
+		for (ymx = 0; ymx < 4; ++ymx)
+		{
 			if (sPiece.size[xmy][ymx] != TILENODRAW)
+			{
 				DrawTile(sPiece.x + xmy, sPiece.y + ymx, sPiece.size[xmy][ymx]);
-
+			}
+		}
+	}
 
 	// Redraw the entire Display
 	SDL_Flip(Display);
@@ -274,23 +333,28 @@ void DrawMap()
 //-----------------------------------------------------------------------------
 void NewBlock()
 {
-	int newblock;
-	int i, j;
+	int newBlock;
+	int i;
+	int j;
+
 	//  0   1   2   3   4    5   6    
 	//   X                             These
 	//   X   XX   X  XX   XX  XX   XX  are
 	//   X   XX  XXX  XX XX    X   X   block
 	//   X                     X   X   types
-
+	//
 	// begin game! make generate a block and then one in preview.
 
 	srand(SDL_GetTicks());
 
-
 	// initialize the piece to all blank.
-	for (i = 0; i < 4; i++)
-		for (j = 0; j < 4; j++)
+	for (i = 0; i < 4; ++i)
+	{
+		for (j = 0; j < 4; ++j)
+		{
 			sPiece.size[i][j] = TILENODRAW;
+		}
+	}
 
 	sPiece.x = MAPWIDTH / 2 - 2;
 	sPiece.y = -1;
@@ -303,9 +367,9 @@ void NewBlock()
 		// From now on, use previous preview block.
 		GAMESTARTED = true;
 
-		newblock = rand() % 7;
+		newBlock = rand() % 7;
 
-		switch (newblock)
+		switch (newBlock)
 		{
 			case 0: // Tower!
 			{
@@ -314,69 +378,83 @@ void NewBlock()
 				sPiece.size[1][2] = TILERED;
 				sPiece.size[1][3] = TILERED;
 				sPiece.y = 0;
-			}break;
+			} break;
+
 			case 1: // Box!
 			{
 				sPiece.size[1][1] = TILEBLUE;
 				sPiece.size[1][2] = TILEBLUE;
 				sPiece.size[2][1] = TILEBLUE;
 				sPiece.size[2][2] = TILEBLUE;
-			}break;
+			} break;
+
 			case 2: // Pyramid!
 			{
 				sPiece.size[1][1] = TILESTEEL;
 				sPiece.size[0][2] = TILESTEEL;
 				sPiece.size[1][2] = TILESTEEL;
 				sPiece.size[2][2] = TILESTEEL;
-			}break;
+			} break;
+
 			case 3: // Left Leaner
 			{
 				sPiece.size[0][1] = TILEYELLOW;
 				sPiece.size[1][1] = TILEYELLOW;
 				sPiece.size[1][2] = TILEYELLOW;
 				sPiece.size[2][2] = TILEYELLOW;
-			}break;
+			} break;
+
 			case 4: // Right Leaner
 			{
 				sPiece.size[2][1] = TILEGREEN;
 				sPiece.size[1][1] = TILEGREEN;
 				sPiece.size[1][2] = TILEGREEN;
 				sPiece.size[0][2] = TILEGREEN;
-			}break;
+			} break;
+
 			case 5: // Left Knight
 			{
 				sPiece.size[1][1] = TILEWHITE;
 				sPiece.size[2][1] = TILEWHITE;
 				sPiece.size[2][2] = TILEWHITE;
 				sPiece.size[2][3] = TILEWHITE;
-			}break;
+			} break;
+
 			case 6: // Right Knight
 			{
 				sPiece.size[2][1] = TILEPURPLE;
 				sPiece.size[1][1] = TILEPURPLE;
 				sPiece.size[1][2] = TILEPURPLE;
 				sPiece.size[1][3] = TILEPURPLE;
-			}break;
+			} break;
 		}
 	}
 	else
 	{
-		for (i = 0; i < 4; i++)
-			for (j = 0; j < 4; j++)
+		for (i = 0; i < 4; ++i)
+		{
+			for (j = 0; j < 4; ++j)
+			{
 				sPiece.size[i][j] = sPrePiece.size[i][j];
+			}
+		}
 
 	}
 
-	newblock = rand() % 7;
+	newBlock = rand() % 7;
 
-	for (i = 0; i < 4; i++)
-		for (j = 0; j < 4; j++)
+	for (i = 0; i < 4; ++i)
+	{
+		for (j = 0; j < 4; ++j)
+		{
 			sPrePiece.size[i][j] = TILENODRAW;
+		}
+	}
 
 	sPrePiece.x = MAPWIDTH + GREY / 4;
 	sPrePiece.y = GREY / 4;
 
-	switch (newblock)
+	switch (newBlock)
 	{
 		case 0: // Tower!
 		{
@@ -384,49 +462,55 @@ void NewBlock()
 			sPrePiece.size[1][1] = TILERED;
 			sPrePiece.size[1][2] = TILERED;
 			sPrePiece.size[1][3] = TILERED;
-		}break;
+		} break;
+
 		case 1: // Box!
 		{
 			sPrePiece.size[1][1] = TILEBLUE;
 			sPrePiece.size[1][2] = TILEBLUE;
 			sPrePiece.size[2][1] = TILEBLUE;
 			sPrePiece.size[2][2] = TILEBLUE;
-		}break;
+		} break;
+
 		case 2: // Pyramid!
 		{
 			sPrePiece.size[1][1] = TILESTEEL;
 			sPrePiece.size[0][2] = TILESTEEL;
 			sPrePiece.size[1][2] = TILESTEEL;
 			sPrePiece.size[2][2] = TILESTEEL;
-		}break;
+		} break;
+
 		case 3: // Left Leaner
 		{
 			sPrePiece.size[0][1] = TILEYELLOW;
 			sPrePiece.size[1][1] = TILEYELLOW;
 			sPrePiece.size[1][2] = TILEYELLOW;
 			sPrePiece.size[2][2] = TILEYELLOW;
-		}break;
+		} break;
+
 		case 4: // Right Leaner
 		{
 			sPrePiece.size[2][1] = TILEGREEN;
 			sPrePiece.size[1][1] = TILEGREEN;
 			sPrePiece.size[1][2] = TILEGREEN;
 			sPrePiece.size[0][2] = TILEGREEN;
-		}break;
+		} break;
+
 		case 5: // Left Knight
 		{
 			sPrePiece.size[1][1] = TILEWHITE;
 			sPrePiece.size[2][1] = TILEWHITE;
 			sPrePiece.size[2][2] = TILEWHITE;
 			sPrePiece.size[2][3] = TILEWHITE;
-		}break;
+		} break;
+
 		case 6: // Right Knight
 		{
 			sPrePiece.size[2][1] = TILEPURPLE;
 			sPrePiece.size[1][1] = TILEPURPLE;
 			sPrePiece.size[1][2] = TILEPURPLE;
 			sPrePiece.size[1][3] = TILEPURPLE;
-		}break;
+		} break;
 	}
 
 	DrawMap();
@@ -435,36 +519,66 @@ void NewBlock()
 //-----------------------------------------------------------------------------
 void RotateBlock()
 {
-	int i, j, temp[4][4];
+	int i;
+	int j;
+	int temp[4][4];
 
-	// copy &rotate the piece to the temporary array
-	for (i = 0; i < 4; i++)
-		for (j = 0; j < 4; j++)
+	// copy & rotate the piece to the temporary array
+	for (i = 0; i < 4; ++i)
+	{
+		for (j = 0; j < 4; ++j)
+		{
 			temp[3 - j][i] = sPiece.size[i][j];
+		}
+	}
 
 	// check collision of the temporary array with map borders
-	for (i = 0; i < 4; i++)
-		for (j = 0; j < 4; j++)
+	for (i = 0; i < 4; ++i)
+	{
+		for (j = 0; j < 4; ++j)
+		{
 			if (temp[i][j] != TILENODRAW)
+			{
 				if (sPiece.x + i < 0 || sPiece.x + i > MAPWIDTH - 1 ||
 					sPiece.y + j < 0 || sPiece.y + j > MAPHEIGHT - 1)
+				{
 					return;
+				}
+			}
+		}
+	}
 
 	// check collision of the temporary array with the blocks on the map
-	for (int x = 0; x < MAPWIDTH; x++)
-		for (int y = 0; y < MAPHEIGHT; y++)
+	for (int x = 0; x < MAPWIDTH; ++x)
+	{
+		for (int y = 0; y < MAPHEIGHT; ++y)
+		{
 			if (x >= sPiece.x && x < sPiece.x + 4)
+			{
 				if (y >= sPiece.y && y < sPiece.y + 4)
+				{
 					if (Map[x][y] != TILEBLACK)
+					{
 						if (temp[x - sPiece.x][y - sPiece.y] != TILENODRAW)
+						{
 							return;
+						}
+					}
+				}
+			}
+		}
+	}
 
 	// end collision check
 
 	// successful!  copy the rotated temporary array to the original piece
-	for (i = 0; i < 4; i++)
-		for (j = 0; j < 4; j++)
+	for (i = 0; i < 4; ++i)
+	{
+		for (j = 0; j < 4; ++j)
+		{
 			sPiece.size[i][j] = temp[i][j];
+		}
+	}
 
 	DrawMap();
 }
@@ -474,7 +588,7 @@ void Move(int x, int y)
 {
 	if (CollisionTest(x, y))
 	{
-		if (y == 1)
+		if (1 == y)
 		{
 			if (sPiece.y < 1)
 			{
@@ -482,36 +596,53 @@ void Move(int x, int y)
 			}
 			else
 			{
-				bool killblock = false;
-				int i, j;
+				bool killBlock = false;
+				int i;
+				int j;
 
 				// new block time! add this one to the list!
-				for (i = 0; i < 4; i++)
-					for (j = 0; j < 4; j++)
+				for (i = 0; i < 4; ++i)
+				{
+					for (j = 0; j < 4; ++j)
+					{
 						if (sPiece.size[i][j] != TILENODRAW)
+						{
 							Map[sPiece.x + i][sPiece.y + j] = sPiece.size[i][j];
+						}
+					}
+				}
 
 				// check for cleared row!
-				for (j = 0; j < MAPHEIGHT; j++)
+				for (j = 0; j < MAPHEIGHT; ++j)
 				{
 					bool filled = true;
-					for (i = 0; i < MAPWIDTH; i++)
+
+					for (i = 0; i < MAPWIDTH; ++i)
+					{
 						if (Map[i][j] == TILEBLACK)
+						{
 							filled = false;
+						}
+					}
 
 					if (filled)
 					{
 						RemoveRow(j);
-						killblock = true;
+						killBlock = true;
 					}
 				}
 
-				if (killblock)
+				if (killBlock)
 				{
-					for (i = 0; i < 4; i++)
-						for (j = 0; j < 4; j++)
+					for (i = 0; i < 4; ++i)
+					{
+						for (j = 0; j < 4; ++j)
+						{
 							sPiece.size[i][j] = TILENODRAW;
+						}
+					}
 				}
+
 				NewBlock();
 			}
 		}
@@ -532,34 +663,63 @@ int CollisionTest(int nx, int ny)
 	int newx = sPiece.x + nx;
 	int newy = sPiece.y + ny;
 
-	int i, j, x, y;
+	int i;
+	int j;
+	int x;
+	int y;
 
 	for (i = 0; i < 4; i++)
+	{
 		for (j = 0; j < 4; j++)
+		{
 			if (sPiece.size[i][j] != TILENODRAW)
+			{
 				if (newx + i < 0 || newx + i > MAPWIDTH - 1 ||
 					newy + j < 0 || newy + j > MAPHEIGHT - 1)
+				{
 					return 1;
+				}
+			}
+		}
+	}
 
 	for (x = 0; x < MAPWIDTH; x++)
+	{
 		for (y = 0; y < MAPHEIGHT; y++)
+		{
 			if (x >= newx && x < newx + 4)
+			{
 				if (y >= newy && y < newy + 4)
+				{
 					if (Map[x][y] != TILEBLACK)
+					{
 						if (sPiece.size[x - newx][y - newy] != TILENODRAW)
+						{
 							return 1;
+						}
+					}
+				}
+			}
+		}
+	}
+
 	return 0;
 }
 
 //-----------------------------------------------------------------------------
 void RemoveRow(int row)
 {
-	int x, y;
+	int x;
+	int y;
 	int counter = 0;
 
 	for (x = 0; x < MAPWIDTH; x++)
+	{
 		for (y = row; y > 0; y--)
+		{
 			Map[x][y] = Map[x][y - 1];
+		}
+	}
 
 }
 
@@ -569,8 +729,21 @@ void Blit(SDL_Surface *Dest, int DestX, int DestY, SDL_Surface *Src)
 	// Create a Rect, and store the coordinates in it.
 	// Because SDL likes it this way. 
 	SDL_Rect DestR;
-	DestR.x = DestX; DestR.y = DestY;
+	DestR.x = DestX; 
+	DestR.y = DestY;
 
+	// Use this function to perform a fast surface copy to a destination surface.
+	// int SDL_BlitSurface( SDL_Surface*    src,
+	//						const SDL_Rect* srcrect,
+	//						SDL_Surface*    dst,
+	//						SDL_Rect*       dstrect
+	//						)
+	//
+	// src --- SDL_surface structure to be copied from
+	// srcrect --- the rectangle to be copied, or NULL to copy the entire surface
+	// dst --- destination target
+	// dstrect --- representing the rectangle that is copied into
+	//
 	// Draw to the Dest
 	SDL_BlitSurface(Src, NULL, Dest, &DestR);
 }
@@ -578,13 +751,18 @@ void Blit(SDL_Surface *Dest, int DestX, int DestY, SDL_Surface *Src)
 //-----------------------------------------------------------------------------
 void Blit(SDL_Surface *Dest, int DestX, int DestY, SDL_Surface *Src, int SrcX, int SrcY, int SrcW, int SrcH)
 {
-	// Create a 2 Rects. The first is for where we want to Blit to.
+	// Create 2 Rects. The first is for where we want to Blit to.
 	// The other is for clipping the 'Src' so we only draw the portion we want
 
-	SDL_Rect DestR;  SDL_Rect SrcR;
-	DestR.x = DestX; DestR.y = DestY;
-	SrcR.x = SrcX;   SrcR.y = SrcY;
-	SrcR.w = SrcW;   SrcR.h = SrcH;
+	SDL_Rect DestR; 
+	DestR.x = DestX;
+	DestR.y = DestY;
+	 
+	SDL_Rect SrcR;
+	SrcR.x = SrcX;
+	SrcR.y = SrcY;
+	SrcR.w = SrcW;
+	SrcR.h = SrcH;
 
 	// Draw to the Dest
 	SDL_BlitSurface(Src, &SrcR, Dest, &DestR);
