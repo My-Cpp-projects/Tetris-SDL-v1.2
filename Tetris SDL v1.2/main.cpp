@@ -12,7 +12,7 @@
 #include <iostream>
 
 //=============================================================================
-#define WWIDTH		160									// Width of Window
+#define WWIDTH		288									// Width of Window
 #define WHEIGHT		480									// Height of Window
 #define WBIT		16									// 16-bit colors
 #define WFLAGS		SDL_HWSURFACE | SDL_DOUBLEBUF		// Set up for Video Hardware and Double Buffering
