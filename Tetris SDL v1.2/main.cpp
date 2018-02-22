@@ -44,11 +44,15 @@ const int TILEPURPLE = 8;
 bool GameInit(); // game initialization function
 void GameLoop(); // where the game actually takes place
 void GameDone(); // clean up! 
+
 void DrawTile(int x, int y, int tile); // coordinates & tile type
+
 void DrawMap(); // draw the whole map.. render function, basically
+
 void NewBlock(); // create a new block!
 void RotateBlock(); // rotate a block.. if you can!
 void Move(int x, int y); // coordinates to move.
+
 int CollisionTest(int nx, int ny); // test collision of blocks
 void RemoveRow(int row); // remove a row.. that would be the 'x'.
 void NewGame(); // make a new game!
