@@ -406,7 +406,7 @@ void NewBlock()
 	int i;
 	int j;
 
-	//  0   1   2   3   4    5   6    
+	//   0   1   2   3   4    5   6    
 	//   X                             These
 	//   X   XX   X  XX   XX  XX   XX  are
 	//   X   XX  XXX  XX XX    X   X   block

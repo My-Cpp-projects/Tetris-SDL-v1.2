@@ -5,6 +5,8 @@
 #ifndef GAMECONTROLLER_H
 #define GAMECONTROLLER_H
 
+#include "Util.h"
+
 class GameController
 {
 
@@ -18,7 +20,11 @@ public:
 
 private:
 
+	Util util;
 
+	double start_time;  // used in timing
+	double press_time; // used to regulate the speed when a key is pressed
+	bool GAMESTARTED = false; // used by NewBlock()
 
 };
 
