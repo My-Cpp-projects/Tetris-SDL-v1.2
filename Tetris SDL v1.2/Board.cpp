@@ -54,13 +54,12 @@ bool tetris::Board::isValidSize(int number)
 	return retVal;
 }
 
-
 void tetris::Board::start()
 {
 	FigureFactory factory;
 	Figure* figure = factory.createFigure(Figure::STICK);
 
-	figure->setCoordinates(mData->mWidth / (::DrawUtil::TILE_SIZE * 2) + 1, 0);
+	figure->setCoordinates(mData->mWidth / 2 - 1, 0);
 	mData->mFigure = figure;
 }
 
@@ -101,11 +100,16 @@ void tetris::Board::init()
 	}
 	else
 	{
-		mData->mBoard = new int*[mData->mHeight];
+		mData->mBoard = new int*[mData->mWidth];
 
-		for (int i = 0; i < mData->mHeight; ++i)
+		for (int i = 0; i < mData->mWidth; ++i)
 		{
-			mData->mBoard[i] = new int[mData->mWidth] (); // init all to 0
+			mData->mBoard[i] = new int[mData->mHeight];
+
+			for (int j = 0; j < mData->mHeight; ++j)
+			{
+				mData->mBoard[i][j] = ::DrawUtil::TILE_BLACK;
+			}
 		}
 
 		mIsInitialized = true;

@@ -5,9 +5,10 @@
 #include "BoardView.h"
 #include "BoardData.h"
 
+
 tetris::BoardView::BoardView(DISPLAY_REF display, SURF_BLOCKS_REF surfBlocks, BoardData* data)
 	: View(display, surfBlocks)
-	, mData(data)
+	, mBoardData(data)
 {
 }
 
@@ -18,22 +19,22 @@ void tetris::BoardView::Draw()
 	
 	// draw the board
 	// loop through the positions
-	for (xmy = 0; xmy < mData->mWidth; ++xmy)
+	for (xmy = 0; xmy < mBoardData->mWidth; ++xmy)
 	{
-		for (ymx = 0; ymx < mData->mHeight; ++ymx)
+		for (ymx = 0; ymx < mBoardData->mHeight; ++ymx)
 		{
-			::DrawUtil::DrawTile(xmy, ymx, mData->mBoard[xmy][ymx], getDisplay(), getSurfBlocks());
+			::DrawUtil::DrawTile(xmy, ymx, mBoardData->mBoard[xmy][ymx], getDisplay(), getSurfBlocks());
 		}
 	}
 	
 	// draw moving block
-	for (xmy = 0; xmy < mData->mFigure->FIGURE_WIDTH; ++xmy)
+	for (xmy = 0; xmy < mBoardData->mFigure->FIGURE_WIDTH; ++xmy)
 	{
-		for (ymx = 0; ymx < mData->mFigure->FIGURE_HEIGHT; ++ymx)
+		for (ymx = 0; ymx < mBoardData->mFigure->FIGURE_HEIGHT; ++ymx)
 		{
-			if (mData->mFigure->mFigureMatrix[xmy][ymx] != ::DrawUtil::TILE_NODRAW)
+			if (mBoardData->mFigure->mFigureMatrix[xmy][ymx] != ::DrawUtil::TILE_NODRAW)
 			{
-				::DrawUtil::DrawTile(mData->mFigure->getXCoordinate() + xmy, mData->mFigure->getYCoordinate() + ymx, mData->mFigure->mFigureMatrix[xmy][ymx], getDisplay(), getSurfBlocks());
+				::DrawUtil::DrawTile(mBoardData->mFigure->getXCoordinate() + xmy, mBoardData->mFigure->getYCoordinate() + ymx, mBoardData->mFigure->mFigureMatrix[xmy][ymx], getDisplay(), getSurfBlocks());
 			}
 		}
 	}  

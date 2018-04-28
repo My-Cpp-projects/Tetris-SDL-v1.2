@@ -54,10 +54,8 @@ int main(int argc, char *args[])
 
 	SDL_WM_SetCaption(WINDOWTITLE, WINDOWTITLE);
 
-	tetris::Board board(248, 364);
-
-	// create ONE figure
-	board.start();
+	// board size in tiles
+	tetris::Board board(18, 30);
 
 	tetris::BoardView boardView(display, surfBlocks, board.getBoardData());
 	tetris::GameView gameView(display, surfBlocks);
@@ -66,6 +64,8 @@ int main(int argc, char *args[])
 	
 	double start_time = SDL_GetTicks();
 
+	// create ONE figure
+	board.start();
 
 	while (GAMERUNNING)
 	{
@@ -80,7 +80,7 @@ int main(int argc, char *args[])
 		gameView.Draw();
 	}
 
-	return 1;
+	return 0;
 }
 
 void GameDone()

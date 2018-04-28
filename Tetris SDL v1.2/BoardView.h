@@ -31,7 +31,7 @@ public:
 	
 private:
 
-	BoardData* mData;
+	BoardData* mBoardData;
 };
 
 #endif // !BOARDVIEW_H
