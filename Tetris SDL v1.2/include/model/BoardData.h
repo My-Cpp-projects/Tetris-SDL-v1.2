@@ -30,6 +30,8 @@ struct tetris::BoardData
 	// contains the colours of every tile
 	int** mBoard;
 
+	bool newGame;
+
 	Figure* mFigure;
 };
 

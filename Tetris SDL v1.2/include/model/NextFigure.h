@@ -1,44 +1,45 @@
 
 
 
-#ifndef BOARD_H
-#define BOARD_H
+
+#ifndef NEXTFIGURE_H
 
 // forward declaration of BoardData
 // we can do this because we only have pointer to BoardData type 
 namespace tetris
 {
-	struct BoardData;
+	struct NextFigureData;
 }
 
 namespace tetris
 {
-	class Board;
+	class NextFigure;
 }
 
 ////////////////////
 // CLASS
 ////////////////////
 
-class tetris::Board
+class tetris::NextFigure
 {
 
 public:
 
-	Board(int width, int height);
+	NextFigure(int width, int height);
 
 public:
 
 	void setWidth(int width);
 	void setHeight(int height);
 	bool isValidSize(int number);
-	BoardData* getBoardData();
 	void start();
-
-
-	////////////////////////
-	// PRIVATES
-	////////////////////////
+	void generateNewFigure(bool generate);
+	bool isNewFigure();
+	NextFigureData* getNextFigureData();
+	
+////////////////////////
+// PRIVATES
+////////////////////////
 
 private:
 
@@ -47,10 +48,10 @@ private:
 	void init();
 
 private:
-	
-	BoardData* mData;
+
+	NextFigureData* mNextFigureData;
 	bool mIsInitialized;
 };
 
-#endif // !BOARD_H
+#endif // !NEXTFIGURE_H
 

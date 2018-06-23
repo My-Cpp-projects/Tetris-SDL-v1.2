@@ -1,11 +1,12 @@
 
 
 
-#include "GameView.h"
+#include "../../include/view/GameView.h"
+
 #include "SDL.h"
 
 tetris::GameView::GameView(DISPLAY_REF display, SURF_BLOCKS_REF surfBlocks)
-	: View(display, surfBlocks)
+	: View(display, surfBlocks, 0, 0)
 {
 }
 

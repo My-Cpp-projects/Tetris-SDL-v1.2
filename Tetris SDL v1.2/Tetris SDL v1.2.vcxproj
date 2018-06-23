@@ -135,72 +135,36 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Block.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="Board.cpp" />
-    <ClCompile Include="DrawUtil.cpp" />
-    <ClCompile Include="Figure.cpp" />
-    <ClCompile Include="FigureFactory.cpp" />
-    <ClCompile Include="GameController.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="GameView.cpp" />
-    <ClCompile Include="AAAmain.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="BoardView.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Map.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="Tile.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="Util.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="src\controller\GameController.cpp" />
+    <ClCompile Include="src\factory\FigureFactory.cpp" />
+    <ClCompile Include="src\logger\Logger.cpp" />
+    <ClCompile Include="src\model\Board.cpp" />
+    <ClCompile Include="src\model\Figure.cpp" />
+    <ClCompile Include="src\model\NextFigure.cpp" />
+    <ClCompile Include="src\util\DrawUtil.cpp" />
+    <ClCompile Include="src\view\BoardView.cpp" />
+    <ClCompile Include="src\view\GameView.cpp" />
+    <ClCompile Include="src\view\NextFigureView.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="AbstractView.h" />
-    <ClInclude Include="Board.h" />
-    <ClInclude Include="BoardData.h" />
-    <ClInclude Include="DrawUtil.h" />
-    <ClInclude Include="Figure.h" />
-    <ClInclude Include="GameController.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="GameView.h" />
-    <ClInclude Include="BoardView.h" />
-    <ClInclude Include="FigureFactory.h" />
-    <ClInclude Include="Map.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="Block.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="Piece.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="Tile.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="Util.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="View.h" />
+    <Image Include="blocks.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\controller\GameController.h" />
+    <ClInclude Include="include\factory\FigureFactory.h" />
+    <ClInclude Include="include\logger\Logger.h" />
+    <ClInclude Include="include\model\Board.h" />
+    <ClInclude Include="include\model\BoardData.h" />
+    <ClInclude Include="include\model\Figure.h" />
+    <ClInclude Include="include\model\NextFigure.h" />
+    <ClInclude Include="include\model\NextFigureData.h" />
+    <ClInclude Include="include\util\DrawUtil.h" />
+    <ClInclude Include="include\view\AbstractView.h" />
+    <ClInclude Include="include\view\BoardView.h" />
+    <ClInclude Include="include\view\GameView.h" />
+    <ClInclude Include="include\view\NextFigureView.h" />
+    <ClInclude Include="include\view\View.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

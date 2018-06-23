@@ -26,11 +26,13 @@ public:
 
 public:
 
-	View(DISPLAY_REF display, SURF_BLOCKS_REF surfBlocks)
+	// constructor
+	View(DISPLAY_REF display, SURF_BLOCKS_REF surfBlocks, int x, int y)
 		: mDisplay(display)
 		, mSurfBlocks(surfBlocks)
+		, mX(x)
+		, mY(y)
 	{
-
 	}
 
 public:
@@ -54,6 +56,11 @@ public:
 	{
 		return mSurfBlocks;
 	}
+
+protected:
+
+	int mX;
+	int mY;
 
 private:
 

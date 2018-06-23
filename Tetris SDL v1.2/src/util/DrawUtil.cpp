@@ -1,7 +1,7 @@
 
 
 
-#include "DrawUtil.h"
+#include "../../include/util/DrawUtil.h"
 
 void DrawUtil::Blit(SDL_Surface* Dest, int DestX, int DestY, SDL_Surface* Src)
 {

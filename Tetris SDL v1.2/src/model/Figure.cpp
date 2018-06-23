@@ -1,9 +1,10 @@
 
 
 
-#include "Figure.h"
+#include "../../include/factory/FigureFactory.h"
 
-tetris::Figure::Figure(int** figureMatrix)
+tetris::Figure::Figure(int** figureMatrix, FigureType type)
+	: mType(type)
 {
 	for (int i = 0; i < FIGURE_WIDTH; ++i)
 	{
@@ -16,16 +17,16 @@ tetris::Figure::Figure(int** figureMatrix)
 
 void tetris::Figure::setCoordinates(int x, int y)
 {
-	setXCoordinate(x);
-	setYCoordinate(y);
+	setCoordinateX(x);
+	setCoordinateY(y);
 }
 
-void tetris::Figure::setXCoordinate(int x)
+void tetris::Figure::setCoordinateX(int x)
 {
 	mX = x;
 }
 
-void tetris::Figure::setYCoordinate(int y)
+void tetris::Figure::setCoordinateY(int y)
 {
 	mY = y;
 }

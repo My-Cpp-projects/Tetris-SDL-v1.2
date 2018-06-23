@@ -5,7 +5,7 @@
 #ifndef FIGUREFACTORY_H
 #define FIGUREFACTORY_H
 
-#include "Figure.h"
+#include "../../include/model/Figure.h"
 
 namespace tetris
 {

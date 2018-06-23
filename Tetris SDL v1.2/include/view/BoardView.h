@@ -23,7 +23,7 @@ class tetris::BoardView : public View
 
 public:
 
-	BoardView(DISPLAY_REF display, SURF_BLOCKS_REF surfBlocks, BoardData* data);
+	BoardView(DISPLAY_REF display, SURF_BLOCKS_REF surfBlocks, BoardData* data, int x, int y);
 
 public:
 
