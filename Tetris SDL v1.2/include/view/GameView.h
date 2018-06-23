@@ -5,9 +5,7 @@
 #ifndef GAMEVIEW_H
 #define GAMEVIEW_H
 
-#include "SDL.h"
 #include "View.h"
-#include <vector>
 
 namespace tetris
 {

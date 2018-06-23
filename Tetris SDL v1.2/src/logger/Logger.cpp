@@ -3,9 +3,7 @@
 
 #include "../../include/logger/Logger.h"
 
-#include <iostream>
 #include <fstream>
-
 
 void Logger::print(std::string text)
 {
@@ -13,3 +11,4 @@ void Logger::print(std::string text)
 	outfile << text.c_str() << std::endl;
 	outfile.close();
 }
+

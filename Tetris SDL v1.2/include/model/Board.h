@@ -35,6 +35,7 @@ public:
 	void start();
 	void startNewGame(bool start);
 	bool isNewGame();
+	void clearBoard();
 	BoardData* getBoardData();
 
 

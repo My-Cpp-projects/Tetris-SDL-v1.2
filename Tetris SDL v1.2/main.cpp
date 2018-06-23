@@ -11,7 +11,6 @@
 #include "include/view/GameView.h"
 
 
-#include <iostream>
 #include "SDL.h"
 
 #define WWIDTH		336									// Width of Window

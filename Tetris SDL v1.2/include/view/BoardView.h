@@ -7,7 +7,7 @@
 
 #include "View.h"
 
-// forward declaration of BoardData, DrawUtil
+// forward declaration of BoardData
 namespace tetris
 {
 	struct BoardData;

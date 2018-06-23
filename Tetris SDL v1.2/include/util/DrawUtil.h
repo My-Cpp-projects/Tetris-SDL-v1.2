@@ -32,8 +32,6 @@ public:
 	static void Blit(SDL_Surface* Dest, int DestX, int DestY, SDL_Surface* Src, int SrcX, int SrcY, int SrcW, int SrcH);
 
 	static void DrawTile(int x, int y, int tile, SDL_Surface* display, SDL_Surface* surfBlock); // coordinates & tile type
-	//static void DrawBackground();
-	//static void DrawPiece();
 };
 
 #endif // !DRAWUTIL_H

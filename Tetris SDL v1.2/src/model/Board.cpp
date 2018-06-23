@@ -12,7 +12,7 @@
 
 tetris::Board::Board(int width, int height)
 	: mIsInitialized(false)
-	, mBoardData(new tetris::BoardData(width, height))
+	, mBoardData(new BoardData(width, height))
 {
 	init();
 	startNewGame(true);
@@ -59,14 +59,7 @@ void tetris::Board::start()
 {
 	if (isNewGame())
 	{
-		// clear board to black
-		for (int i = 0; i < mBoardData->mWidth; ++i)
-		{
-			for (int j = 0; j < mBoardData->mHeight; ++j)
-			{
-				mBoardData->mBoard[i][j] = ::DrawUtil::TILE_BLACK;
-			}
-		}
+		clearBoard();
 
 		// create new figure
 		FigureFactory factory;
@@ -94,6 +87,18 @@ bool tetris::Board::isNewGame()
 tetris::BoardData* tetris::Board::getBoardData()
 {
 	return mBoardData;
+}
+
+void tetris::Board::clearBoard()
+{
+	// clear board to black
+	for (int i = 0; i < mBoardData->mWidth; ++i)
+	{
+		for (int j = 0; j < mBoardData->mHeight; ++j)
+		{
+			mBoardData->mBoard[i][j] = ::DrawUtil::TILE_BLACK;
+		}
+	}
 }
 
 ///////////////////////////////////////////////
